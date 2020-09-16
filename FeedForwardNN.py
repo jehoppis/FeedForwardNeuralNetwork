@@ -104,29 +104,22 @@ class FFNN:
         input_data, output_data = self.permute(input_data, output_data)
         batch_size = int(data_percent * input_data.shape[0])
         n_batches = input_data.shape[0] // batch_size
-        # print(n_batches)
-        # print(batch_size)
+        
         for i in range(n_epochs):
-            # print('i=', i)
-            # print()
             for j in range(n_batches):
-                # print('j=', j)
                 k = j * batch_size
-                # print('k=', k)
-                # print()
                 affine, activation = self.forward_prop(input_data[k:k+batch_size, :], output_data[k:k+batch_size, :])
                 error = self.back_prop(output_data[k :k+batch_size, :], activation)
                 partials = self.partial_der(input_data[k:k+batch_size, :], activation, error)
-                # if k == 50:
-                #     for p in self.weights.keys():
-                #         print(partials[p])
                 self.update(input_data[k:k+batch_size, :], partials, learning_rate)
+                
             if n_batches * batch_size != input_data.shape[0]:
                 affine, activation = self.forward_prop(input_data[n_batches * batch_size:, :],
                                                        output_data[n_batches * batch_size:, :])
                 error = self.back_prop(output_data[n_batches * batch_size:, :], activation)
                 partials = self.partial_der(input_data[n_batches * batch_size:, :], activation, error)
                 self.update(input_data[n_batches * batch_size:, :], partials, learning_rate)
+                
             loss_list.append(self.mse(input_data, output_data))
         epochs = np.arange(0, n_epochs, 1)
         history = np.array(loss_list)
