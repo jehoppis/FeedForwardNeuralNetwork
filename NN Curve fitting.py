@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import FeedForwardNN
-from numba import vectorize, cuda
 
 np.random.seed(1)
 print('One dimensional curve fitting:')
